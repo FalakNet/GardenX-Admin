@@ -7,7 +7,7 @@ import type { Product } from "@/types"
 
 export async function getProducts() {
   try {
-    const cookieStore = await cookies()
+    const cookieStore = cookies()
     const supabase = createServerSupabaseClient(cookieStore)
 
     const { data, error } = await supabase.from("products").select("*").order("name")
@@ -26,7 +26,7 @@ export async function getProducts() {
 
 export async function getProduct(id: number) {
   try {
-    const cookieStore = await cookies()
+    const cookieStore = cookies()
     const supabase = createServerSupabaseClient(cookieStore)
 
     const { data, error } = await supabase.from("products").select("*").eq("id", id).single()
@@ -45,7 +45,7 @@ export async function getProduct(id: number) {
 
 export async function createProduct(product: Omit<Product, "id" | "created_at" | "updated_at">) {
   try {
-    const cookieStore = await cookies()
+    const cookieStore = cookies()
     const supabase = createServerSupabaseClient(cookieStore)
 
     const { data, error } = await supabase.from("products").insert([product]).select()
@@ -65,7 +65,7 @@ export async function createProduct(product: Omit<Product, "id" | "created_at" |
 
 export async function updateProduct(id: number, product: Partial<Product>) {
   try {
-    const cookieStore = await cookies()
+    const cookieStore = cookies()
     const supabase = createServerSupabaseClient(cookieStore)
 
     const { data, error } = await supabase
@@ -92,7 +92,7 @@ export async function updateProduct(id: number, product: Partial<Product>) {
 
 export async function deleteProduct(id: number) {
   try {
-    const cookieStore = await cookies()
+    const cookieStore = cookies()
     const supabase = createServerSupabaseClient(cookieStore)
 
     const { error } = await supabase.from("products").delete().eq("id", id)

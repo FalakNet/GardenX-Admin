@@ -11,7 +11,7 @@ export type Order = OrderType
 export type OrderItem = OrderItemType
 
 export async function getOrders() {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   const supabase = createServerSupabaseClient(cookieStore)
 
   const { data, error } = await supabase
@@ -31,7 +31,7 @@ export async function getOrders() {
 }
 
 export async function getOrder(id: number) {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   const supabase = createServerSupabaseClient(cookieStore)
 
   const { data, error } = await supabase
@@ -53,7 +53,7 @@ export async function getOrder(id: number) {
 }
 
 export async function getOrderDetails(orderId: number) {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   const supabase = createServerSupabaseClient(cookieStore)
 
   // Get order with customer info
@@ -95,7 +95,7 @@ export async function createOrder(
   order: Omit<Order, "id" | "created_at" | "updated_at">,
   items: Omit<OrderItem, "id" | "order_id" | "created_at">[],
 ) {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   const supabase = createServerSupabaseClient(cookieStore)
 
   // Generate an order ID if not provided
@@ -139,7 +139,7 @@ export async function createOrder(
 }
 
 export async function updateOrderStatus(id: number, status: Order["status"]) {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   const supabase = createServerSupabaseClient(cookieStore)
 
   const { data, error } = await supabase
@@ -162,7 +162,7 @@ export async function updateOrderStatus(id: number, status: Order["status"]) {
 }
 
 export async function refundOrder(id: number, amount: number, reason: string) {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   const supabase = createServerSupabaseClient(cookieStore)
 
   // In a real app, you would integrate with payment processor here
@@ -190,7 +190,7 @@ export async function refundOrder(id: number, amount: number, reason: string) {
 }
 
 export async function cancelOrder(id: number, reason: string) {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   const supabase = createServerSupabaseClient(cookieStore)
 
   const { data, error } = await supabase

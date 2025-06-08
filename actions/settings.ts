@@ -32,7 +32,7 @@ export interface BusinessSettings {
 }
 
 export async function getCustomerGroups() {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   const supabase = createServerSupabaseClient(cookieStore)
 
   const { data, error } = await supabase.from("customer_groups").select("*").order("min_spend")
@@ -46,7 +46,7 @@ export async function getCustomerGroups() {
 }
 
 export async function saveCustomerGroup(group: Omit<CustomerGroup, "created_at" | "updated_at">) {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   const supabase = createServerSupabaseClient(cookieStore)
 
   const { data, error } = await supabase
@@ -67,7 +67,7 @@ export async function saveCustomerGroup(group: Omit<CustomerGroup, "created_at" 
 }
 
 export async function deleteCustomerGroup(id: string) {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   const supabase = createServerSupabaseClient(cookieStore)
 
   const { error } = await supabase.from("customer_groups").delete().eq("id", id)
@@ -82,7 +82,7 @@ export async function deleteCustomerGroup(id: string) {
 }
 
 export async function getPaymentSettings() {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   const supabase = createServerSupabaseClient(cookieStore)
 
   const { data, error } = await supabase.from("settings").select("*").eq("category", "payment").single()
@@ -106,7 +106,7 @@ export async function getPaymentSettings() {
 }
 
 export async function savePaymentSettings(settings: PaymentSettings) {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   const supabase = createServerSupabaseClient(cookieStore)
 
   // First try to update existing record
@@ -146,7 +146,7 @@ export async function savePaymentSettings(settings: PaymentSettings) {
 }
 
 export async function getBusinessSettings() {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   const supabase = createServerSupabaseClient(cookieStore)
 
   const { data, error } = await supabase.from("settings").select("*").eq("category", "business").single()
@@ -170,7 +170,7 @@ export async function getBusinessSettings() {
 }
 
 export async function saveBusinessSettings(settings: BusinessSettings) {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   const supabase = createServerSupabaseClient(cookieStore)
 
   // First try to update existing record

@@ -5,7 +5,7 @@ import { createServerSupabaseClient } from "@/lib/supabase"
 import type { DashboardStats, Order } from "@/types"
 
 export async function getDashboardStats(): Promise<DashboardStats> {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   const supabase = createServerSupabaseClient(cookieStore)
 
   // Get total revenue

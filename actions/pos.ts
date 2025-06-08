@@ -8,7 +8,7 @@ import { deductStoreCredit, addCustomerReward } from "./customers"
 
 export async function getPosProducts() {
   try {
-    const cookieStore = await cookies()
+    const cookieStore = cookies()
     const supabase = createServerSupabaseClient(cookieStore)
 
     // Get products with denominations
@@ -63,7 +63,7 @@ export async function createPosOrder(
       throw new Error("Invalid order total")
     }
 
-    const cookieStore = await cookies()
+    const cookieStore = cookies()
     const supabase = createServerSupabaseClient(cookieStore)
 
     // Calculate cashback (10%) - only for identified customers
@@ -198,7 +198,7 @@ export async function createPosOrder(
 
 export async function searchCustomerByPhone(phone: string) {
   try {
-    const cookieStore = await cookies()
+    const cookieStore = cookies()
     const supabase = createServerSupabaseClient(cookieStore)
 
     const { data, error } = await supabase.from("customers").select("*").ilike("phone", `%${phone}%`).limit(1)
@@ -216,7 +216,7 @@ export async function searchCustomerByPhone(phone: string) {
 
 export async function getProductDenominations(productId: number) {
   try {
-    const cookieStore = await cookies()
+    const cookieStore = cookies()
     const supabase = createServerSupabaseClient(cookieStore)
 
     const { data, error } = await supabase
