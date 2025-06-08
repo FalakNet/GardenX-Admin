@@ -25,23 +25,28 @@ export async function login(prevState: any, formData: FormData) {
     return { success: false, error: error?.message || "Invalid credentials" }
   }
 
-  // Set the Supabase Auth session in a cookie
-  cookieStore.set("sb-access-token", data.session.access_token, {
+  // Get fresh cookie store instances for each cookie operation
+  const freshCookieStore1 = await cookies()
+  freshCookieStore1.set("sb-access-token", data.session.access_token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     maxAge: data.session.expires_in,
     path: "/",
     sameSite: "lax",
   })
-  cookieStore.set("sb-refresh-token", data.session.refresh_token, {
+  
+  const freshCookieStore2 = await cookies()
+  freshCookieStore2.set("sb-refresh-token", data.session.refresh_token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60 * 24 * 7, // 7 days
     path: "/",
     sameSite: "lax",
   })
+  
   // Set admin_session cookie for middleware
-  cookieStore.set("admin_session", "authenticated", {
+  const freshCookieStore3 = await cookies()
+  freshCookieStore3.set("admin_session", "authenticated", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60 * 24 * 7,
