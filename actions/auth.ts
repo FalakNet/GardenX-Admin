@@ -4,9 +4,17 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { createServerSupabaseClient } from "@/lib/supabase"
 
-export async function login(username: string, password: string) {
+export async function login(prevState: any, formData: FormData) {
+  const username = formData.get("username") as string
+  const password = formData.get("password") as string
+
+  if (!username || !password) {
+    return { success: false, error: "Email and password are required" }
+  }
+
   const cookieStore = await cookies()
   const supabase = createServerSupabaseClient(cookieStore)
+  
   // Use Supabase Auth to sign in
   const { data, error } = await supabase.auth.signInWithPassword({
     email: username,
@@ -41,7 +49,7 @@ export async function login(username: string, password: string) {
     sameSite: "lax",
   })
 
-  return { success: true }
+  redirect("/admin")
 }
 
 export async function logout() {
