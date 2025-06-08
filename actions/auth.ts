@@ -12,7 +12,7 @@ export async function login(prevState: any, formData: FormData) {
     return { success: false, error: "Email and password are required" }
   }
 
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const supabase = createServerSupabaseClient(cookieStore)
   
   // Use Supabase Auth to sign in
@@ -25,8 +25,8 @@ export async function login(prevState: any, formData: FormData) {
     return { success: false, error: error?.message || "Invalid credentials" }
   }
 
-  // Use the same cookie store instance for all cookie operations
-  cookieStore.set("sb-access-token", data.session.access_token, {
+  // Call cookies() directly for each operation to stay within request scope
+  ;(await cookies()).set("sb-access-token", data.session.access_token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     maxAge: data.session.expires_in,
@@ -34,7 +34,7 @@ export async function login(prevState: any, formData: FormData) {
     sameSite: "lax",
   })
   
-  cookieStore.set("sb-refresh-token", data.session.refresh_token, {
+  ;(await cookies()).set("sb-refresh-token", data.session.refresh_token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60 * 24 * 7, // 7 days
@@ -43,7 +43,7 @@ export async function login(prevState: any, formData: FormData) {
   })
   
   // Set admin_session cookie for middleware
-  cookieStore.set("admin_session", "authenticated", {
+  ;(await cookies()).set("admin_session", "authenticated", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60 * 24 * 7,
@@ -55,17 +55,16 @@ export async function login(prevState: any, formData: FormData) {
 }
 
 export async function logout() {
-  // Remove Supabase Auth cookies
-  const cookieStore = cookies()
-  cookieStore.delete("sb-access-token")
-  cookieStore.delete("sb-refresh-token")
-  cookieStore.delete("admin_session")
+  // Remove Supabase Auth cookies - call cookies() directly for each operation
+  ;(await cookies()).delete("sb-access-token")
+  ;(await cookies()).delete("sb-refresh-token")
+  ;(await cookies()).delete("admin_session")
   redirect("/login")
 }
 
 export async function checkAuth() {
   // Check for Supabase Auth access token cookie
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const session = cookieStore.get("sb-access-token")
   return !!session?.value
 }
