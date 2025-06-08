@@ -1,10 +1,9 @@
 import { createClient } from "@supabase/supabase-js"
 import { cache } from "react"
-import { cookies } from "next/headers"
+import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies"
 
 // Create a Supabase client for server-side with cookie-based auth
-export const createServerSupabaseClient = () => {
-  const cookieStore = cookies()
+export const createServerSupabaseClient = (cookieStore: ReadonlyRequestCookies) => {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || "",
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || "",
@@ -13,7 +12,7 @@ export const createServerSupabaseClient = () => {
         persistSession: false,
         detectSessionInUrl: false,
         storage: {
-          getItem: async (key) => (await cookieStore).get(key)?.value ?? null,
+          getItem: async (key) => cookieStore.get(key)?.value ?? null,
           setItem: () => {},
           removeItem: () => {},
         },

@@ -5,7 +5,8 @@ import { redirect } from "next/navigation"
 import { createServerSupabaseClient } from "@/lib/supabase"
 
 export async function login(username: string, password: string) {
-  const supabase = createServerSupabaseClient()
+  const cookieStore = await cookies()
+  const supabase = createServerSupabaseClient(cookieStore)
   // Use Supabase Auth to sign in
   const { data, error } = await supabase.auth.signInWithPassword({
     email: username,
@@ -17,7 +18,6 @@ export async function login(username: string, password: string) {
   }
 
   // Set the Supabase Auth session in a cookie
-  const cookieStore = await cookies()
   cookieStore.set("sb-access-token", data.session.access_token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",

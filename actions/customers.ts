@@ -1,12 +1,14 @@
 "use server"
 
+import { cookies } from "next/headers"
 import { createServerSupabaseClient } from "@/lib/supabase"
 import { revalidatePath } from "next/cache"
 import type { Customer, RewardsTransaction } from "@/types"
 
 export async function getCustomers() {
   try {
-    const supabase = createServerSupabaseClient()
+    const cookieStore = await cookies()
+    const supabase = createServerSupabaseClient(cookieStore)
 
     const { data, error } = await supabase.from("customers").select("*").order("name")
 
@@ -24,7 +26,8 @@ export async function getCustomers() {
 
 export async function getCustomer(id: number) {
   try {
-    const supabase = createServerSupabaseClient()
+    const cookieStore = await cookies()
+    const supabase = createServerSupabaseClient(cookieStore)
 
     const { data, error } = await supabase.from("customers").select("*").eq("id", id).single()
 
@@ -42,7 +45,8 @@ export async function getCustomer(id: number) {
 
 export async function createCustomer(customer: Omit<Customer, "id" | "created_at" | "updated_at">) {
   try {
-    const supabase = createServerSupabaseClient()
+    const cookieStore = await cookies()
+    const supabase = createServerSupabaseClient(cookieStore)
 
     // Generate a customer ID if not provided
     if (!customer.customer_id) {
@@ -68,7 +72,8 @@ export async function createCustomer(customer: Omit<Customer, "id" | "created_at
 
 export async function updateCustomer(id: number, customer: Partial<Customer>) {
   try {
-    const supabase = createServerSupabaseClient()
+    const cookieStore = await cookies()
+    const supabase = createServerSupabaseClient(cookieStore)
 
     const { data, error } = await supabase
       .from("customers")
@@ -94,7 +99,8 @@ export async function updateCustomer(id: number, customer: Partial<Customer>) {
 
 export async function getCustomerRewards(customerId: number) {
   try {
-    const supabase = createServerSupabaseClient()
+    const cookieStore = await cookies()
+    const supabase = createServerSupabaseClient(cookieStore)
 
     const { data, error } = await supabase
       .from("rewards_transactions")
@@ -121,7 +127,8 @@ export async function addCustomerReward(
   type: "earned" | "redeemed",
 ) {
   try {
-    const supabase = createServerSupabaseClient()
+    const cookieStore = await cookies()
+    const supabase = createServerSupabaseClient(cookieStore)
 
     // Get current customer data
     const { data: customer } = await supabase
@@ -183,7 +190,8 @@ export async function deductStoreCredit(
   amount: number,
 ) {
   try {
-    const supabase = createServerSupabaseClient()
+    const cookieStore = await cookies()
+    const supabase = createServerSupabaseClient(cookieStore)
 
     // Get current customer data
     const { data: customer } = await supabase
@@ -240,7 +248,8 @@ export async function deductStoreCredit(
 
 export async function addStoreCredit(customerId: number, amount: number) {
   try {
-    const supabase = createServerSupabaseClient()
+    const cookieStore = await cookies()
+    const supabase = createServerSupabaseClient(cookieStore)
 
     const { data: customer, error: fetchError } = await supabase
       .from('customers')
@@ -268,7 +277,8 @@ export async function addStoreCredit(customerId: number, amount: number) {
 
 export async function removeStoreCredit(customerId: number, amount: number) {
   try {
-    const supabase = createServerSupabaseClient()
+    const cookieStore = await cookies()
+    const supabase = createServerSupabaseClient(cookieStore)
 
     const { data: customer, error: fetchError } = await supabase
       .from('customers')

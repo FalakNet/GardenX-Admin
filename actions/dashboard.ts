@@ -1,10 +1,12 @@
 "use server"
 
+import { cookies } from "next/headers"
 import { createServerSupabaseClient } from "@/lib/supabase"
 import type { DashboardStats, Order } from "@/types"
 
 export async function getDashboardStats(): Promise<DashboardStats> {
-  const supabase = createServerSupabaseClient()
+  const cookieStore = await cookies()
+  const supabase = createServerSupabaseClient(cookieStore)
 
   // Get total revenue
   const { data: revenueData, error: revenueError } = await supabase.from("orders").select("total_amount")

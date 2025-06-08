@@ -1,5 +1,6 @@
 "use server"
 
+import { cookies } from "next/headers"
 import { createServerSupabaseClient } from "@/lib/supabase"
 import { revalidatePath } from "next/cache"
 import type { Order as OrderType, OrderItem as OrderItemType } from "@/types"
@@ -10,7 +11,8 @@ export type Order = OrderType
 export type OrderItem = OrderItemType
 
 export async function getOrders() {
-  const supabase = createServerSupabaseClient()
+  const cookieStore = await cookies()
+  const supabase = createServerSupabaseClient(cookieStore)
 
   const { data, error } = await supabase
     .from("orders")
@@ -29,7 +31,8 @@ export async function getOrders() {
 }
 
 export async function getOrder(id: number) {
-  const supabase = createServerSupabaseClient()
+  const cookieStore = await cookies()
+  const supabase = createServerSupabaseClient(cookieStore)
 
   const { data, error } = await supabase
     .from("orders")
@@ -50,7 +53,8 @@ export async function getOrder(id: number) {
 }
 
 export async function getOrderDetails(orderId: number) {
-  const supabase = createServerSupabaseClient()
+  const cookieStore = await cookies()
+  const supabase = createServerSupabaseClient(cookieStore)
 
   // Get order with customer info
   const { data: order, error: orderError } = await supabase
@@ -91,7 +95,8 @@ export async function createOrder(
   order: Omit<Order, "id" | "created_at" | "updated_at">,
   items: Omit<OrderItem, "id" | "order_id" | "created_at">[],
 ) {
-  const supabase = createServerSupabaseClient()
+  const cookieStore = await cookies()
+  const supabase = createServerSupabaseClient(cookieStore)
 
   // Generate an order ID if not provided
   if (!order.order_id) {
@@ -134,7 +139,8 @@ export async function createOrder(
 }
 
 export async function updateOrderStatus(id: number, status: Order["status"]) {
-  const supabase = createServerSupabaseClient()
+  const cookieStore = await cookies()
+  const supabase = createServerSupabaseClient(cookieStore)
 
   const { data, error } = await supabase
     .from("orders")
@@ -156,7 +162,8 @@ export async function updateOrderStatus(id: number, status: Order["status"]) {
 }
 
 export async function refundOrder(id: number, amount: number, reason: string) {
-  const supabase = createServerSupabaseClient()
+  const cookieStore = await cookies()
+  const supabase = createServerSupabaseClient(cookieStore)
 
   // In a real app, you would integrate with payment processor here
   // For now, we'll just update the order status and log the refund
@@ -183,7 +190,8 @@ export async function refundOrder(id: number, amount: number, reason: string) {
 }
 
 export async function cancelOrder(id: number, reason: string) {
-  const supabase = createServerSupabaseClient()
+  const cookieStore = await cookies()
+  const supabase = createServerSupabaseClient(cookieStore)
 
   const { data, error } = await supabase
     .from("orders")
