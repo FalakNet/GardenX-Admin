@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useFormState } from "react-dom"
+import { useActionState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -16,7 +16,7 @@ const initialState = {
 }
 
 export default function LoginPage() {
-  const [state, formAction, isPending] = useFormState(login, initialState)
+  const [state, formAction, isPending] = useActionState(login, initialState)
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
