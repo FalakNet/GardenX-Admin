@@ -22,3 +22,4 @@ next-env.d.ts
 # next.js build output
 # Uncommented .next to include build files in version control for Vercel deployment
 .next
+.env
