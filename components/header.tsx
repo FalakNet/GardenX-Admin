@@ -10,7 +10,6 @@ import {
   RefreshCcw as Loader,
 } from "lucide-react";
 import { logout } from "@/actions/auth";
-import { ref } from "process";
 
 interface HeaderProps {
   title: string;
@@ -53,10 +52,12 @@ export function Header({ title, subtitle, actions }: HeaderProps) {
           <Download className="h-4 w-4 mr-2" />
           View Orders
         </Button>
-        <Button variant="ghost" size="sm" onClick={() => logout()}>
-          <LogOut className="h-4 w-4 mr-2" />
-          Logout
-        </Button>
+        <form action={logout}>
+          <Button variant="ghost" size="sm" type="submit">
+            <LogOut className="h-4 w-4 mr-2" />
+            Logout
+          </Button>
+        </form>
       </div>
     </div>
   );
